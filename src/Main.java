@@ -20,11 +20,12 @@ public class Main {
             argument = Integer.parseInt(args[2]);
         }
 
+        //BEFORE RUNNING, FILL IN USERNAME AND PASSWORD FIELDS !
         //connect to database
         Connection connection = DriverManager.getConnection(
                 "jdbc:oracle:thin:@oracle.wpi.edu:1521:orcl",
-                "XXXXX",
-                "XXXXX");
+                "YOUR USERNAME",
+                "YOUR PASSWORD");
 
         if(argument == 0) {
             System.out.println("1- Report Patients Basic Information\n " +
@@ -83,14 +84,12 @@ public class Main {
             ps.setString(1, adNum);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                // Print basic admission details
                 System.out.println("Admission Number: " + rs.getString("AdmissionNum"));
                 System.out.println("Patient SSN: " + rs.getString("PatientSSN"));
                 System.out.println("Admission Date (start date): " + rs.getDate("AdmissionDate"));
                 System.out.println("Total Payment: " + rs.getDouble("TotalPayment"));
 
 
-                // Query to retrieve room details
                 PreparedStatement roomStmt = connection.prepareStatement(
                         "SELECT RoomNum, StartDate, EndDate FROM StayIn WHERE AdmissionNum = ?");
                 roomStmt.setString(1, adNum);
@@ -104,8 +103,6 @@ public class Main {
                             " ToDate: " + roomRs.getDate("EndDate"));
                 }
 
-
-                // Query to retrieve unique doctors who examined the patient
                 PreparedStatement doctorStmt = connection.prepareStatement(
                         "SELECT DISTINCT DoctorID FROM Examine WHERE AdmissionNum = ?");
                 doctorStmt.setString(1, adNum);
@@ -128,6 +125,11 @@ public class Main {
 
             System.out.print("Enter the new total payment: ");
             Double totalPayment = scanner.nextDouble();
+
+            PreparedStatement ps = connection.prepareStatement("UPDATE Admission SET TotalPayment = ? WHERE AdmissionNum = ?");
+            ps.setDouble(1, totalPayment);
+            ps.setString(2, adNum);
+            ps.executeUpdate();
         }
         else{
             System.err.println("Invalid argument");

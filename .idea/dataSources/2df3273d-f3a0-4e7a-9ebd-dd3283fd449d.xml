@@ -288,11 +288,11 @@
       <AutoIntrospectionLevel>3</AutoIntrospectionLevel>
       <CreatedTimestamp>2024-09-29.07:56:50</CreatedTimestamp>
       <Current>1</Current>
-      <LastIntrospectionL1Timestamp>2024-10-09.07:14:17</LastIntrospectionL1Timestamp>
-      <LastIntrospectionL2Timestamp>2024-10-09.07:14:17</LastIntrospectionL2Timestamp>
-      <LastIntrospectionL3Timestamp>2024-10-09.07:14:17</LastIntrospectionL3Timestamp>
+      <LastIntrospectionL1Timestamp>2024-10-09.07:55:02</LastIntrospectionL1Timestamp>
+      <LastIntrospectionL2Timestamp>2024-10-09.07:55:02</LastIntrospectionL2Timestamp>
+      <LastIntrospectionL3Timestamp>2024-10-09.07:55:02</LastIntrospectionL3Timestamp>
       <LastIntrospectionLevel>3</LastIntrospectionLevel>
-      <LastIntrospectionLocalTimestamp>2024-10-09.15:14:23</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-10-09.15:55:05</LastIntrospectionLocalTimestamp>
       <LastIntrospectionVersion>200820</LastIntrospectionVersion>
       <ModifiedTimestamp>2024-10-09.07:13:44</ModifiedTimestamp>
       <ObjectId>2697</ObjectId>
@@ -602,9 +602,9 @@
     </schema>
     <schema id="197" parent="1" name="PUBLIC">
       <AutoIntrospectionLevel>1</AutoIntrospectionLevel>
-      <LastIntrospectionL1Timestamp>2024-10-09.07:14:17</LastIntrospectionL1Timestamp>
+      <LastIntrospectionL1Timestamp>2024-10-09.07:55:02</LastIntrospectionL1Timestamp>
       <LastIntrospectionLevel>1</LastIntrospectionLevel>
-      <LastIntrospectionLocalTimestamp>2024-10-09.15:14:17</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-10-09.15:55:05</LastIntrospectionLocalTimestamp>
       <ObjectId>1</ObjectId>
     </schema>
     <schema id="198" parent="1" name="QCHEN5">
