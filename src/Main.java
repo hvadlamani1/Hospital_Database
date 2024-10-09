@@ -1,8 +1,11 @@
+import java.sql.DriverManager;
 import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.*;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Scanner scanner = new Scanner(System.in);
 
         if(args.length < 2){
@@ -16,6 +19,13 @@ public class Main {
         if(args.length > 2) {
             argument = Integer.parseInt(args[2]);
         }
+
+        //connect to database
+        Connection connection = DriverManager.getConnection(
+                "jdbc:oracle:thin:@oracle.wpi.edu:1521:orcl",
+                "YOUR USERNAME",
+                "PASSWORDD");
+
         if(argument == 0) {
             System.out.println("1- Report Patients Basic Information\n " +
                     "2- Report Doctors Basic Information\n" +
@@ -24,25 +34,66 @@ public class Main {
         }
 
         else if(argument == 1) {
-            System.out.println("Enter Patient SSN: ");
+            System.out.print("Enter Patient SSN: ");
             String pSSN = scanner.nextLine();
+
+            PreparedStatement ps = connection.prepareStatement("select SSN, FIRSTNAME, LASTNAME, ADDRESS from Patient where SSN = ?");
+            ps.setString(1, pSSN);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                System.out.println("Patient SSN: " + rs.getString("SSN"));
+                System.out.println("Patient First Name: " + rs.getString("FIRSTNAME"));
+                System.out.println("Patient Last Name: " + rs.getString("LASTNAME"));
+                System.out.println("Patient Address: " + rs.getString("ADDRESS"));
+            }
+
         }
 
         else if(argument == 2) {
-            System.out.println("Enter Doctor ID: ");
+            System.out.print("Enter Doctor ID: ");
             String dID = scanner.nextLine();
+
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT E.EMPLOYEEID, E.FNAME, E.LNAME, D.GENDER, D.GRADUATEDFROM, D.SPECIALTY " +
+                            "FROM Doctor D " +
+                            "JOIN Employee E ON D.EmployeeID = E.EmployeeID " +
+                            "WHERE D.EMPLOYEEID = ?"
+            );
+
+            ps.setString(1, dID);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                System.out.println("Doctor ID: " + rs.getString("EmployeeID"));
+                System.out.println("Doctor First Name: " + rs.getString("E.FNAME"));
+                System.out.println("Doctor Last Name: " + rs.getString("LNAME"));
+                System.out.println("Doctor Gender: " + rs.getString("GENDER"));
+                System.out.println("Doctor Graduated From: " + rs.getString("GRADUATEDFROM"));
+                System.out.println("Doctor Speciality: " + rs.getString("SPECIALTY"));
+            }
+
         }
 
         else if(argument == 3) {
-            System.out.println("Enter Admission Number: ");
+            System.out.print("Enter Admission Number: ");
             String adNum = scanner.nextLine();
+            PreparedStatement ps = connection.prepareStatement("SELECT a.AdmissionNum, a.PatientSSN, a.AdmissionDate, a.TotalPayment " +
+                    "FROM Admission a WHERE a.AdmissionNum = ?"
+            );
+            ps.setString(1, adNum);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                System.out.println("Admission Number: " + rs.getString("AdmissionNum"));
+                System.out.println("Admission Date: " + rs.getString("AdmissionDate"));
+
+            }
         }
 
         else if(argument == 4) {
-            System.out.println("Enter Admission Number: ");
+            System.out.print("Enter Admission Number: ");
             String adNum = scanner.nextLine();
 
-            System.out.println("Enter the new total payment: ");
+            System.out.print("Enter the new total payment: ");
             Double totalPayment = scanner.nextDouble();
         }
         else{
