@@ -23,8 +23,8 @@ public class Main {
         //connect to database
         Connection connection = DriverManager.getConnection(
                 "jdbc:oracle:thin:@oracle.wpi.edu:1521:orcl",
-                "YOUR USERNAME",
-                "PASSWORDD");
+                "XXXXX",
+                "XXXXX");
 
         if(argument == 0) {
             System.out.println("1- Report Patients Basic Information\n " +
@@ -65,7 +65,7 @@ public class Main {
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 System.out.println("Doctor ID: " + rs.getString("EmployeeID"));
-                System.out.println("Doctor First Name: " + rs.getString("E.FNAME"));
+                System.out.println("Doctor First Name: " + rs.getString("FNAME"));
                 System.out.println("Doctor Last Name: " + rs.getString("LNAME"));
                 System.out.println("Doctor Gender: " + rs.getString("GENDER"));
                 System.out.println("Doctor Graduated From: " + rs.getString("GRADUATEDFROM"));
@@ -82,11 +82,44 @@ public class Main {
             );
             ps.setString(1, adNum);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            if (rs.next()) {
+                // Print basic admission details
                 System.out.println("Admission Number: " + rs.getString("AdmissionNum"));
-                System.out.println("Admission Date: " + rs.getString("AdmissionDate"));
+                System.out.println("Patient SSN: " + rs.getString("PatientSSN"));
+                System.out.println("Admission Date (start date): " + rs.getDate("AdmissionDate"));
+                System.out.println("Total Payment: " + rs.getDouble("TotalPayment"));
 
+
+                // Query to retrieve room details
+                PreparedStatement roomStmt = connection.prepareStatement(
+                        "SELECT RoomNum, StartDate, EndDate FROM StayIn WHERE AdmissionNum = ?");
+                roomStmt.setString(1, adNum);
+                ResultSet roomRs = roomStmt.executeQuery();
+
+
+                System.out.println("Rooms:");
+                while (roomRs.next()) {
+                    System.out.println("RoomNum: " + roomRs.getString("RoomNum") +
+                            " FromDate: " + roomRs.getDate("StartDate") +
+                            " ToDate: " + roomRs.getDate("EndDate"));
+                }
+
+
+                // Query to retrieve unique doctors who examined the patient
+                PreparedStatement doctorStmt = connection.prepareStatement(
+                        "SELECT DISTINCT DoctorID FROM Examine WHERE AdmissionNum = ?");
+                doctorStmt.setString(1, adNum);
+                ResultSet doctorRs = doctorStmt.executeQuery();
+
+
+                System.out.println("Doctors examined the patient in this admission:");
+                while (doctorRs.next()) {
+                    System.out.println("Doctor ID: " + doctorRs.getString("DoctorID"));
+                }
+            } else {
+                System.out.println("Admission not found.");
             }
+
         }
 
         else if(argument == 4) {
